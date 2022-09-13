@@ -3,7 +3,6 @@ use rand::Rng;
 use std::io::stdin;
 
 #[allow(dead_code)]
-
 struct Player {
     name: String,
     hand: Vec<Card>,
@@ -53,7 +52,6 @@ impl Naipe {
 
 #[derive(Debug, Clone, Copy)]
 #[allow(dead_code)]
-
 struct Card {
     number: u8,
     naipe: Naipe,
@@ -96,6 +94,10 @@ impl Game {
             let random_idx = generate_rnd(0, 10) as usize;
             self.deck.swap(i, random_idx);
         }
+    }
+
+    fn pull_card(self: &mut Self) -> Option<Card> {
+        self.deck.pop()
     }
 }
 
