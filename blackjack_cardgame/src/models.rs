@@ -1,19 +1,21 @@
-use core::panic;
 use std::io::stdin;
 
-use crate::utils::generate_rnd;
-
 #[allow(dead_code)]
+#[derive(Clone)]
 pub struct Player {
+    pub id: i32,
     pub name: String,
     pub hand: Vec<Card>,
+    pub is_burn: bool,
 }
 
 impl Player {
-    pub fn new(player_name: String) -> Player {
+    pub fn new(player_name: String, id: i32) -> Player {
         Player {
+            id,
             name: player_name,
             hand: vec![],
+            is_burn: false,
         }
     }
 
@@ -24,6 +26,10 @@ impl Player {
             Err(_) | Ok(1 | 0) => return format!("Player {}", id),
             Ok(_) => return input.replace("\n", ""),
         }
+    }
+
+    pub fn draw_card(self: &mut Self, card: Card) {
+        self.hand.push(card)
     }
 }
 
@@ -37,7 +43,6 @@ pub enum Naipe {
 
 impl Naipe {
     pub fn get_naipe(num: u8) -> Result<Naipe, String> {
-        println!("{:?}", num);
         if num > 3 {
             return Err(String::from("Não temos mais de 4 naipes 🤔"));
         }
@@ -58,46 +63,11 @@ pub struct Card {
     pub naipe: Naipe,
 }
 
-pub struct Game {
-    pub deck: Vec<Card>,
-    pub players: [Player; 2],
-}
-
-impl Game {
-    pub fn new() -> Game {
-        Game {
-            deck: Game::generate_deck(),
-            players: [
-                Player::new(Player::read_player_data(1)),
-                Player::new(Player::read_player_data(2)),
-            ],
+impl Card {
+    pub fn new(number: u8, naipe: Naipe) -> Result<Card, ()> {
+        if number > 12 {
+            return Err(());
         }
-    }
-
-    pub fn generate_deck() -> Vec<Card> {
-        let card_amount = 52;
-        let naipe_cards = 13;
-        return (0..card_amount)
-            .map(|z| {
-                return Card {
-                    number: z % naipe_cards,
-                    naipe: match Naipe::get_naipe(z / naipe_cards) {
-                        Ok(value) => value,
-                        Err(msg) => panic!("{}", msg),
-                    },
-                };
-            })
-            .collect();
-    }
-
-    pub fn shuffle_deck(self: &mut Self) -> () {
-        for i in 0..self.deck.len() {
-            let random_idx = generate_rnd(0, 10) as usize;
-            self.deck.swap(i, random_idx);
-        }
-    }
-
-    pub fn pull_card(self: &mut Self) -> Option<Card> {
-        self.deck.pop()
+        Ok(Card { naipe, number })
     }
 }
