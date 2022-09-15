@@ -1,22 +1,29 @@
 use std::io::stdin;
 
-#[allow(dead_code)]
 #[derive(Clone)]
 pub struct Player {
     pub id: i32,
     pub name: String,
     pub hand: Vec<Card>,
-    pub is_burn: bool,
+    pub stopped: bool,
 }
 
 impl Player {
+    pub fn draw_card(self: &mut Self, card: Card) {
+        self.hand.push(card)
+    }
+
     pub fn new(player_name: String, id: i32) -> Player {
         Player {
             id,
             name: player_name,
             hand: vec![],
-            is_burn: false,
+            stopped: false,
         }
+    }
+
+    pub fn print_hand(self: &Self) -> () {
+        println!("{:?} -> {}", self.hand, self.total_points())
     }
 
     pub fn read_player_data(id: i32) -> String {
@@ -28,11 +35,14 @@ impl Player {
         }
     }
 
-    pub fn draw_card(self: &mut Self, card: Card) {
-        self.hand.push(card)
+    pub fn total_points(self: &Self) -> u8 {
+        self.hand
+            .iter()
+            .fold::<u8, _>(0, |acc, item| acc + item.number)
     }
 }
 
+// TODO: Implementar a trait de Debug para printar as cartas
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Naipe {
     Copas = 0,
@@ -57,7 +67,6 @@ impl Naipe {
 }
 
 #[derive(Debug, Clone, Copy)]
-#[allow(dead_code)]
 pub struct Card {
     pub number: u8,
     pub naipe: Naipe,
@@ -65,7 +74,7 @@ pub struct Card {
 
 impl Card {
     pub fn new(number: u8, naipe: Naipe) -> Result<Card, ()> {
-        if number > 12 {
+        if number > 13 {
             return Err(());
         }
         Ok(Card { naipe, number })

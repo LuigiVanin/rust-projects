@@ -1,8 +1,6 @@
 use crate::models::*;
-use crate::utils::generate_rnd;
-use crate::utils::read_line_clean;
+use crate::utils::{generate_rnd, read_line_clean};
 use core::panic;
-use std::convert::TryInto;
 use std::process::exit;
 
 pub struct Game {
@@ -25,7 +23,7 @@ impl Game {
 
     fn turn(self: &mut Self) {
         for index in 0..self.players.len() {
-            if self.players[index].is_burn {
+            if self.players[index].stopped {
                 continue;
             }
             println!(
@@ -34,17 +32,23 @@ impl Game {
             );
             match read_line_clean() {
                 Ok(key) => match key.as_str() {
-                    "s" => self.players[index].is_burn = true,
+                    "s" => self.players[index].stopped = true,
                     " " => (),
                     _ => continue,
                 },
                 Err(_) => {
-                    println!("passou a rodada!")
+                    println!("passou a rodada!");
+                    continue;
                 }
             };
             match self.player_draw_card(index) {
                 Ok(_) => (),
                 Err(_) => continue,
+            }
+
+            self.players[index].print_hand();
+            if Game::check_player_busted(&mut self.players[index]) {
+                println!("You got busted!");
             }
         }
     }
@@ -53,16 +57,63 @@ impl Game {
         self.shuffle_deck();
         loop {
             self.turn();
+            if self.check_end_game() {
+                self.declare_winner();
+            }
         }
     }
 
-    pub fn generate_deck() -> Vec<Card> {
+    fn declare_winner(self: &Self) -> () {
+        let mut winner: Option<Player> = None;
+        for player in &self.players {
+            winner = match winner.clone() {
+                None => {
+                    if player.total_points() < 21 {
+                        Some(player.clone())
+                    } else {
+                        None
+                    }
+                }
+                Some(value) => {
+                    if value.total_points() < player.total_points() && value.total_points() <= 21 {
+                        Some(player.clone())
+                    } else {
+                        continue;
+                    }
+                }
+            }
+        }
+        match winner {
+            None => println!("Empate!!"),
+            Some(player) => println!("{} Venceu!!", player.name),
+        }
+        self.end_game();
+    }
+
+    pub fn check_player_busted(player: &mut Player) -> bool {
+        if player.total_points() > 21 {
+            player.stopped = true;
+            return true;
+        }
+        false
+    }
+
+    fn check_end_game(self: &Self) -> bool {
+        for player in &self.players {
+            if !player.stopped {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    fn generate_deck() -> Vec<Card> {
         let card_amount = 52;
         let naipe_cards = 13;
         return (0..card_amount)
             .map(|z| {
                 return Card::new(
-                    z % naipe_cards,
+                    (z % naipe_cards) + 1,
                     match Naipe::get_naipe(z / naipe_cards) {
                         Ok(value) => value,
                         Err(msg) => panic!("{}", msg),
@@ -73,19 +124,19 @@ impl Game {
             .collect();
     }
 
-    pub fn shuffle_deck(self: &mut Self) -> () {
+    fn shuffle_deck(self: &mut Self) -> () {
         for i in 0..self.deck.len() {
             let random_idx = generate_rnd(0, self.deck.len().try_into().unwrap()) as usize;
             self.deck.swap(i, random_idx);
         }
     }
 
-    pub fn pull_card(self: &mut Self) -> Option<Card> {
+    fn pull_card(self: &mut Self) -> Option<Card> {
         self.deck.pop()
     }
 
-    pub fn player_draw_card(self: &mut Self, turn: usize) -> Result<Card, ()> {
-        if self.players[self.round].is_burn {
+    fn player_draw_card(self: &mut Self, turn: usize) -> Result<Card, ()> {
+        if self.players[self.round].stopped {
             return Err(());
         }
         match self.pull_card() {
@@ -97,7 +148,7 @@ impl Game {
         }
     }
 
-    pub fn end_game(self: &Self) -> () {
+    fn end_game(self: &Self) -> () {
         println!("Acabou o jogo");
         exit(0)
     }
