@@ -1,5 +1,5 @@
 use crate::models::*;
-use crate::utils::{generate_rnd, read_line_clean};
+use crate::utils::{colored_text, generate_rnd, read_line_clean, Style};
 use core::panic;
 use std::process::exit;
 
@@ -14,8 +14,8 @@ impl Game {
         Game {
             deck: Game::generate_deck(),
             players: [
-                Player::new(Player::read_player_data(0), 0),
                 Player::new(Player::read_player_data(1), 1),
+                Player::new(Player::read_player_data(2), 2),
             ],
             round: 0,
         }
@@ -27,17 +27,20 @@ impl Game {
                 continue;
             }
             println!(
-                "{}, hora de jogar!\n[SPACE] to draw card; [s] to stop",
+                "-> {}, hora de jogar!\n[SPACE] to draw card; [s] to stop",
                 self.players[index].name
             );
             match read_line_clean() {
                 Ok(key) => match key.as_str() {
-                    "s" => self.players[index].stopped = true,
+                    "s" => {
+                        println!("{} Parou de jogar\n", self.players[index].name);
+                        self.players[index].stopped = true;
+                    }
                     " " => (),
                     _ => continue,
                 },
                 Err(_) => {
-                    println!("passou a rodada!");
+                    println!("\npassou a rodada!\n");
                     continue;
                 }
             };
@@ -48,7 +51,14 @@ impl Game {
 
             self.players[index].print_hand();
             if Game::check_player_busted(&mut self.players[index]) {
-                println!("You got busted!");
+                println!(
+                    "{}",
+                    colored_text(
+                        format!("\n{} got busted!\n", self.players[index].name).as_str(),
+                        31,
+                        Style::Bold
+                    )
+                );
             }
         }
     }
@@ -65,27 +75,22 @@ impl Game {
 
     fn declare_winner(self: &Self) -> () {
         let mut winner: Option<Player> = None;
-        for player in &self.players {
-            winner = match winner.clone() {
-                None => {
-                    if player.total_points() < 21 {
-                        Some(player.clone())
-                    } else {
-                        None
-                    }
-                }
-                Some(value) => {
-                    if value.total_points() < player.total_points() && value.total_points() <= 21 {
-                        Some(player.clone())
-                    } else {
-                        continue;
-                    }
-                }
-            }
+        if self.players[0].total_points() <= 21 {
+            winner = Some(self.players[0].clone());
+        }
+        if (self.players[1].total_points() <= 21
+            && self.players[0].total_points() < self.players[1].total_points())
+            || winner.is_none()
+        {
+            winner = Some(self.players[1].clone());
+        }
+
+        if self.players[0].total_points() == self.players[1].total_points() {
+            winner = None;
         }
         match winner {
             None => println!("Empate!!"),
-            Some(player) => println!("{} Venceu!!", player.name),
+            Some(player) => println!("\t==== {} Venceu!! ====\n", player.name),
         }
         self.end_game();
     }
@@ -149,7 +154,10 @@ impl Game {
     }
 
     fn end_game(self: &Self) -> () {
-        println!("Acabou o jogo");
+        println!(
+            "{}",
+            colored_text("\n\t==== Acabou o jogo ====\n", 32, Style::Bold)
+        );
         exit(0)
     }
 }

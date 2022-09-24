@@ -1,4 +1,4 @@
-use std::io::stdin;
+use std::{fmt, fmt::Debug, io::stdin};
 
 #[derive(Clone)]
 pub struct Player {
@@ -23,12 +23,12 @@ impl Player {
     }
 
     pub fn print_hand(self: &Self) -> () {
-        println!("{:?} -> {}", self.hand, self.total_points())
+        println!("{:?} -> total points: {}\n", self.hand, self.total_points())
     }
 
     pub fn read_player_data(id: i32) -> String {
         let mut input = String::new();
-        println!("Insira um Nome para o jogador 1: [Player {}]", id);
+        println!("Insira um Nome para o jogador {}: [Player {}]", id, id);
         match stdin().read_line(&mut input) {
             Err(_) | Ok(1 | 0) => return format!("Player {}", id),
             Ok(_) => return input.replace("\n", ""),
@@ -66,7 +66,7 @@ impl Naipe {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Clone, Copy)]
 pub struct Card {
     pub number: u8,
     pub naipe: Naipe,
@@ -78,5 +78,11 @@ impl Card {
             return Err(());
         }
         Ok(Card { naipe, number })
+    }
+}
+
+impl Debug for Card {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{} de {:?}", self.number, self.naipe)
     }
 }
