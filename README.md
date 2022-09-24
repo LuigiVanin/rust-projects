@@ -6,7 +6,7 @@ Quais projetos se tem a intenção de fazer?
 
 -   Guessing Game - [pasta 📂](/guessing_game)
 -   BlackJack(21) - [pasta 📂](/blackjack_cardgame)
--   Linked List
+-   Stack Linked List - [pasta 📂](/stack_linked_list/)
 -   Postgres DB to JSON
 -   TCP chat with Tokio
 -   Simple Web App
