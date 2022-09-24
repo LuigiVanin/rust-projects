@@ -6,7 +6,7 @@ use std::process::exit;
 pub struct Game {
     pub deck: Vec<Card>,
     pub players: [Player; 2],
-    pub round: usize,
+    pub round: u64,
 }
 
 impl Game {
@@ -136,7 +136,7 @@ impl Game {
     }
 
     fn player_draw_card(self: &mut Self, turn: usize) -> Result<Card, ()> {
-        if self.players[self.round].stopped {
+        if self.players[turn].stopped {
             return Err(());
         }
         match self.pull_card() {
