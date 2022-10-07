@@ -11,3 +11,5 @@ Para rodar os testes desenvolvidos basta:
 ```bash
 > cargo test
 ```
+
+A construção desse código teve apoio do seguinte tutoria: [Linked List](https://www.youtube.com/watch?v=IiDHTIsmUi4)
