@@ -1,4 +1,4 @@
-use postgres::{Client, NoTls, Row};
+use postgres::{Client, Column, NoTls, Row};
 use std::io::stdin;
 
 #[derive(Debug)]
@@ -10,6 +10,13 @@ struct UserData {
     port: String,
 }
 
+enum Data {
+    Int(i32),
+    Str(String),
+}
+
+type SqlData = Option<Data>;
+
 fn main() {
     let user = read_user_data();
     println!("{:?}", user.get_db_url());
@@ -20,9 +27,23 @@ fn main() {
                 "select table_name from information_schema.tables where table_schema = 'public';",
                 &[],
             ).unwrap();
-            for row in table_names {
-                let table_name: String = row.get(0);
+            for table_row in table_names {
+                let table_name: String = table_row.get(0);
+                let rows = client
+                    .query(format!("select * from {}", table_name).as_str(), &[])
+                    .unwrap();
+                // println!("{}", row)
                 println!("{:?}", table_name);
+                for i in rows {
+                    // println!("{}", i.len());
+                    // let value: SqlData = i.get(0);
+                    // println!("{}", value);
+                    // for j in 0..i.len() {
+                    //     let value: String = i.get(j);
+                    //     let column: String = i.columns()[j].name().into();
+                    //     println!("{}: {}", column, value);
+                    // }
+                }
             }
         }
         Err(err) => {
