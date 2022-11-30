@@ -1,0 +1,266 @@
+{
+    "categories": [
+        {
+            "id": 2,
+            "name": "horror"
+        },
+        {
+            "id": 3,
+            "name": "Estrategia"
+        }
+    ],
+    "games": [
+        {
+            "id": 2,
+            "name": "Strange",
+            "image": "https://",
+            "stockTotal": 10,
+            "categoryId": 2,
+            "pricePerDay": 1
+        },
+        {
+            "id": 3,
+            "name": "Strange",
+            "image": "https://",
+            "stockTotal": 10,
+            "categoryId": 2,
+            "pricePerDay": 1
+        },
+        {
+            "id": 4,
+            "name": "Joga y joga",
+            "image": "https://",
+            "stockTotal": 100,
+            "categoryId": 3,
+            "pricePerDay": 1
+        },
+        {
+            "id": 5,
+            "name": "Adedonha",
+            "image": "https://",
+            "stockTotal": 100,
+            "categoryId": 3,
+            "pricePerDay": 20
+        }
+    ],
+    "customers": [
+        {
+            "id": 10,
+            "name": "Beatrice Bulcão",
+            "phone": "991188989",
+            "cpf": "40028922951",
+            "birthday": "1800-01-10"
+        },
+        {
+            "id": 11,
+            "name": "Beatrice Bulcão",
+            "phone": "991188989",
+            "cpf": "40028922953",
+            "birthday": "1800-01-10"
+        },
+        {
+            "id": 13,
+            "name": "Beatrice Bulcão",
+            "phone": "991188989",
+            "cpf": "40028922954",
+            "birthday": "1800-01-10"
+        },
+        {
+            "id": 14,
+            "name": "Beatrice Bulcão",
+            "phone": "991188989",
+            "cpf": "40028922955",
+            "birthday": "1800-01-10"
+        },
+        {
+            "id": 15,
+            "name": "Beatrice Bulcão",
+            "phone": "991188989",
+            "cpf": "40028922956",
+            "birthday": "1800-01-10"
+        },
+        {
+            "id": 16,
+            "name": "Beatrice Bulcão",
+            "phone": "991188989",
+            "cpf": "40028922917",
+            "birthday": "1800-01-10"
+        },
+        {
+            "id": 1,
+            "name": "Lui Felipe Vanin",
+            "phone": "991188989",
+            "cpf": "40028922969",
+            "birthday": "1800-10-01"
+        },
+        {
+            "id": 17,
+            "name": "Beatrice Bulcão",
+            "phone": "84991188989",
+            "cpf": "40028922915",
+            "birthday": "1800-01-10"
+        }
+    ],
+    "rentals": [
+        {
+            "id": 7,
+            "customerId": 1,
+            "gameId": 5,
+            "rentDate": "2022-05-30",
+            "daysRented": 5,
+            "returnDate": null,
+            "originalPrice": 100,
+            "delayFee": null
+        },
+        {
+            "id": 8,
+            "customerId": 14,
+            "gameId": 5,
+            "rentDate": "2022-05-30",
+            "daysRented": 3,
+            "returnDate": null,
+            "originalPrice": 3,
+            "delayFee": null
+        },
+        {
+            "id": 10,
+            "customerId": 14,
+            "gameId": 5,
+            "rentDate": "2022-05-30",
+            "daysRented": 3,
+            "returnDate": "2022-05-30",
+            "originalPrice": 3,
+            "delayFee": 10
+        },
+        {
+            "id": 6,
+            "customerId": 1,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 3,
+            "returnDate": "2022-05-30",
+            "originalPrice": 3,
+            "delayFee": 0
+        },
+        {
+            "id": 13,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 5,
+            "returnDate": null,
+            "originalPrice": 5,
+            "delayFee": null
+        },
+        {
+            "id": 16,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 5,
+            "returnDate": null,
+            "originalPrice": 5,
+            "delayFee": null
+        },
+        {
+            "id": 17,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 5,
+            "returnDate": null,
+            "originalPrice": 5,
+            "delayFee": null
+        },
+        {
+            "id": 18,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 5,
+            "returnDate": null,
+            "originalPrice": 5,
+            "delayFee": null
+        },
+        {
+            "id": 19,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 5,
+            "returnDate": null,
+            "originalPrice": 5,
+            "delayFee": null
+        },
+        {
+            "id": 20,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 5,
+            "returnDate": null,
+            "originalPrice": 5,
+            "delayFee": null
+        },
+        {
+            "id": 11,
+            "customerId": 1,
+            "gameId": 5,
+            "rentDate": "2022-05-30",
+            "daysRented": 5,
+            "returnDate": "2022-05-30",
+            "originalPrice": 100,
+            "delayFee": 0
+        },
+        {
+            "id": 23,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 1,
+            "returnDate": null,
+            "originalPrice": 1,
+            "delayFee": null
+        },
+        {
+            "id": 24,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 1,
+            "returnDate": null,
+            "originalPrice": 1,
+            "delayFee": null
+        },
+        {
+            "id": 25,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 1,
+            "returnDate": null,
+            "originalPrice": 1,
+            "delayFee": null
+        },
+        {
+            "id": 26,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 1,
+            "returnDate": "2022-05-30",
+            "originalPrice": 1,
+            "delayFee": 0
+        },
+        {
+            "id": 27,
+            "customerId": 10,
+            "gameId": 2,
+            "rentDate": "2022-05-30",
+            "daysRented": 1,
+            "returnDate": null,
+            "originalPrice": 1,
+            "delayFee": null
+        }
+    ]
+}
