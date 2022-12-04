@@ -9,3 +9,6 @@ edition = "2021"
 postgres = {version="0.19.4", features = ["with-chrono-0_4"]}
 chrono = "0.4.10"
 
+unicode-segmentation = "1.10.0"
+
+colored = "2.0.0"

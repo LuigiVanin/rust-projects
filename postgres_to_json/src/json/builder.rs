@@ -47,6 +47,7 @@ impl JsonBuilder {
     }
 
     pub fn close_obj(&mut self) {
+        // println!("{}", self.json.chars().last().unwrap());
         self.tab -= 1;
         let tabs = self.create_tabs();
         self.json.push_str(format!("{}}},\n", tabs).as_str())
