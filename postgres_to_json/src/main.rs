@@ -1,92 +1,79 @@
 mod json;
+mod user;
 mod utils;
-use crate::utils::{sql::format_value_to_string, user::read_user_data};
-use colored::Colorize;
+use crate::utils::{
+    logger::Logger,
+    sql::{format_value_to_string, query_all_items, query_table_names},
+    user::read_user_data,
+};
 use json::{builder::JsonBuilder, formatter::remove_leading_commas};
 use postgres::{Client, NoTls, Row};
 use std::{env, fs::File, io::Write};
 
+fn create_obj_from_row(rows: &Vec<Row>, json_builder: &mut JsonBuilder) -> () {
+    let console = Logger::new();
+    for row in rows {
+        json_builder.create_unamed_obj();
+        for col in row.columns() {
+            let value: Option<String> = format_value_to_string(row, col);
+            match value {
+                Some(strg) => json_builder.create_item(col.name(), strg.clone()),
+                None => console.warning("Não sei como fazer a conversão deste item"),
+            }
+        }
+        json_builder.close_obj();
+    }
+    json_builder.close_list();
+}
+
 fn main() -> () {
+    let console = Logger::new();
+
     let mut arguments = env::args();
-    let root_path = arguments.next().unwrap();
+    arguments.next().unwrap();
     let target_path = arguments.next().get_or_insert("db.json".into()).clone();
+
+    console.success("Iniciando Aplicação de conversão de postgres → JSON!");
+
     let user = read_user_data();
     let mut json_builder = JsonBuilder::init();
-    println!("{:?}", user.get_db_url());
-    let conn = Client::connect("postgresql://postgres:1337@localhost:5432/boardcamp", NoTls);
+    let url = user.get_db_url();
+
+    console.info(format!("arquivo para target: {}", url).as_str());
     let mut file = match File::create(&target_path) {
         Ok(it) => it,
-        Err(_err) => return (),
+        Err(_err) => return console.error("Erro ao criar arquivo"),
     };
-    println!(
-        "{}",
-        format!("\n\t├── {} → {}", target_path, "\n".normal().clear())
-    );
+    console.log("\n");
+    console.info("Arquivo gerado com sucesso!");
+    console.info(format!("url gerada: {}", url).as_str());
+    console.info("Conectando ao banco dados...");
+    let conn = Client::connect(url.as_str(), NoTls);
 
     match conn {
         Ok(mut client) => {
-            let table_names: Vec<Row> = client
-                .query(
-                    "
-                    SELECT table_name 
-                    FROM information_schema.tables 
-                    WHERE table_schema = 'public';",
-                    &[],
-                )
-                .unwrap();
+            let table_names: Vec<Row> = query_table_names(&mut client);
+            console.log(format!("\n\t├── {}", target_path).as_str());
             for table_row in table_names {
                 let table_name: String = table_row.get(0);
+                console.log(format!("\t\t└─── Convertendo tabela: {} → json", table_name).as_str());
                 json_builder.create_list(table_name.clone());
-                let rows = client
-                    .query(
-                        format!(
-                            "
-                    SELECT * FROM {}
-                    ",
-                            table_name
-                        )
-                        .as_str(),
-                        &[],
-                    )
-                    .unwrap();
-                for row in &rows {
-                    let columns = row.columns().clone();
-                    json_builder.create_unamed_obj();
-                    for col in columns {
-                        let value: Option<String> = format_value_to_string(row, col);
-                        match value {
-                            Some(strg) => json_builder.create_item(col.name(), strg.clone()),
-                            None => {
-                                println!("I dont know how to parse to shit")
-                            }
-                        }
-                    }
-                    json_builder.close_obj();
-                }
-                json_builder.close_list();
+                let rows = query_all_items(&mut client, table_name);
+                create_obj_from_row(&rows, &mut json_builder);
             }
-            let mut json_text = json_builder.close();
+            let mut json_text = json_builder.close().build();
             remove_leading_commas(&mut json_text);
             match file.write_all(json_text.as_bytes()) {
                 Ok(_) => {
-                    println!(
-                        "{}",
-                        format!(
-                            "\n\t\t{} {}",
-                            "  SQL to JSON - SUCEFULLY CONVERTED ✨  "
-                                .on_green()
-                                .white()
-                                .bold(),
-                            "\n".normal().clear()
-                        )
-                    );
+                    console.success("SQL to JSON - SUCEFULLY CONVERTED ✨");
                     client.close().expect("Uneable to close client!");
                 }
-                Err(_) => return (),
+                Err(_) => console.error("Um erro ocorreu ao converter"),
             };
         }
-        Err(err) => {
-            println!("error: {}", err);
+        Err(_) => {
+            console.warning("Um erro ocorreu no moemnto de conectar ao banco de dados, tente mudar as credenciais");
+            console.error("Um erro ocorreu ao conectar ao banco de dados");
             return ();
         }
     }

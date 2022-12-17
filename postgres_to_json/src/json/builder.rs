@@ -13,9 +13,9 @@ impl JsonBuilder {
         }
     }
 
-    pub fn close(&mut self) -> String {
+    pub fn close(mut self) -> JsonBuilder {
         self.json.push_str("\n}");
-        return self.json.clone();
+        return self;
     }
 
     fn create_tabs(&self) -> String {
@@ -57,5 +57,9 @@ impl JsonBuilder {
         self.tab -= 1;
         let tabs = self.create_tabs();
         self.json.push_str(format!("{}],\n", tabs).as_str())
+    }
+
+    pub fn build(self) -> String {
+        return self.json;
     }
 }
