@@ -18,12 +18,10 @@ impl UserData {
     }
 }
 
-// create struct FOR user builder
 pub struct UserBuilder {
     user: UserData,
 }
 
-// implementation of user builder using user input as values, use read_line_clean() to get user input
 impl UserBuilder {
     pub fn new() -> Self {
         Self {
