@@ -9,7 +9,13 @@ Quais projetos se tem a intenção de fazer?
 -   Stack Linked List - [pasta 📂](/stack_linked_list/)
 -   Postgres DB to JSON - [pasta 📂](/postgres_to_json/)
 -   TCP chat with Tokio
--   Simple Web App
+-   Simple Web App [pasta 📂](/simple_webapp/)
+
+## Todo ✔️
+
+-   [ ] Terminar de realizar testes
+-   [ ] Verificar se o projeto de "postgres to JSON" não é muito difícil em Rust
+-   [ ] Escrever arquivo com JSON
 
 ## Ferramentas Utilizadas 🛠️
 
@@ -18,12 +24,6 @@ Quais projetos se tem a intenção de fazer?
     <img src="https://img.shields.io/badge/Git-E34F26?style=for-the-badge&logo=git&logoColor=white" />
     <img src="https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white">
 </p>
-
-## Todo ✔️
-
--   [ ] Terminar de realizar testes
--   [ ] Verificar se o projeto de "postgres to JSON" não é muito difícil em Rust
--   [ ] Escrever arquivo com JSON
 
 ## Entre em contato 📞
 
