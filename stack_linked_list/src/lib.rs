@@ -53,12 +53,74 @@ impl<T> LinkedList<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rand::Rng;
 
     #[test]
-    fn push_test() {
+    fn push_test_1() {
         let mut list = LinkedList::empty();
 
         list.push_start(12);
         list.push_start(15);
+        assert!(list.get_top() == Some(&15));
+        assert!(list.get_top() == Some(&15));
+
+        list.push_start(0);
+
+        assert!(list.get_top() == Some(&0));
+    }
+
+    #[test]
+    fn push_test_2() {
+        let mut rng = rand::thread_rng();
+        let mut list = LinkedList::<i32>::empty();
+
+        let mut value = rng.gen_range(0..100);
+        list.push_start(value);
+        assert!(list.get_top() == Some(&value));
+
+        value = rng.gen_range(0..100);
+        list.push_start(value);
+        assert!(list.get_top() == Some(&value));
+    }
+
+    #[test]
+    fn pop_test_1() {
+        let mut list = LinkedList::empty();
+        let mut rng = rand::thread_rng();
+
+        for _ in 0..20 {
+            list.push_start(rng.gen_range(0..100));
+        }
+
+        for _ in 0..20 {
+            assert!(!list.pop_start().is_none())
+        }
+
+        assert!(list.pop_start().is_none())
+    }
+
+    #[test]
+    fn pop_test_2() {
+        let mut list = LinkedList::empty();
+        let mut rng = rand::thread_rng();
+
+        for _ in 0..20 {
+            list.push_start(rng.gen_range(0..100));
+        }
+
+        for _ in 0..20 {
+            assert!(!list.pop_start().is_none())
+        }
+
+        assert!(list.pop_start().is_none())
+    }
+
+    #[test]
+    fn new_test_1() {
+        let mut list = LinkedList::new(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+        for i in (1..11).rev() {
+            assert!(list.pop_start() == Some(i));
+        }
     }
 }
