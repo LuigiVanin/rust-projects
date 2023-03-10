@@ -43,7 +43,7 @@ impl Player {
 }
 
 // TODO: Implementar a trait de Debug para printar as cartas
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, PartialEq, Clone, Copy, Eq, Hash)]
 pub enum Naipe {
     Copas = 0,
     Espadas = 1,
