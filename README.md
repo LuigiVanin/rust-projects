@@ -8,7 +8,7 @@ Quais projetos se tem a intenção de fazer?
 -   BlackJack(21) - [pasta 📂](/blackjack_cardgame)
 -   Stack Linked List - [pasta 📂](/stack_linked_list/)
 -   Postgres DB to JSON - [pasta 📂](/postgres_to_json/)
--   TCP chat with Tokio
+-   TCP chat with Tokio - [pasta 📂](https://github.com/LuigiVanin/rust-projects/tree/main/tcp-chat)
 -   Simple Web App [pasta 📂](/simple_webapp/)
 
 ## Todo ✔️
